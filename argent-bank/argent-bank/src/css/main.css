@@ -6,6 +6,12 @@ html {
   color: #2c3e50;
 }
 
+.sign-in-icon {
+  font: normal normal normal 14px / 1 FontAwesome;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -19,6 +25,8 @@ body {
 
 .bg-dark {
   background-color: #12002b;
+  padding-top: 50px;
+  padding-bottom: 90px;
 }
 
 .sr-only {
@@ -71,7 +79,7 @@ body {
 }
 
 .hero {
-  background-image: url('../img/bank-tree.jpeg');
+  background-image: url("../img/bank-tree.jpeg");
   background-position: 0 -50px;
   background-size: cover;
   background-repeat: no-repeat;
@@ -170,12 +178,8 @@ body {
   background-color: white;
   width: 300px;
   margin: 0 auto;
-  margin-top: 3rem;
-  padding: 2rem;
-}
 
-.sign-in-icon {
-  font-size: 5rem;
+  padding: 2rem;
 }
 
 .input-remember {

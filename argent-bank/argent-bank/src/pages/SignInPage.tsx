@@ -8,7 +8,9 @@ const SignInPage: React.FC = () => {
   return (
     <div>
       <Nav />
-      <SignIn />
+      <main className="main bg-dark">
+        <SignIn />
+      </main>
       <Footer />
     </div>
   );

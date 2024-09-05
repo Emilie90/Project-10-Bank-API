@@ -1,6 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store } from "@reduxjs/toolkit";
 import userReducer from "./reducers/userSlice";
-import { Store } from "redux";
 import { rememberMeSlice } from "./reducers/remerberMeSlice";
 import { signInSlice } from "./reducers/signInSlice";
 import { userInfosSlice } from "./reducers/userInfoSlice";
