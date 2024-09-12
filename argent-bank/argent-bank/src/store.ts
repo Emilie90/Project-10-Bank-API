@@ -1,16 +1,8 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
-import userReducer from "./reducers/userSlice";
-import { rememberMeSlice } from "./reducers/remerberMeSlice";
-import { signInSlice } from "./reducers/signInSlice";
-import { userInfosSlice } from "./reducers/userInfoSlice";
+import reducers from "./reducers/reducers";
 
 export const store: Store = configureStore({
-  reducer: {
-    user: userReducer,
-    RememberMe: rememberMeSlice.reducer,
-    UserInfos: userInfosSlice.reducer,
-    SignIn: signInSlice.reducer,
-  },
+  reducer: reducers,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

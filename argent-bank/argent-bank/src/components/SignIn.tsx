@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../css/main.css";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../reducers/userSlice";
+import { login, fetchUserProfile } from "../reducers/reducers"; // Ajout de fetchUserProfile
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
 
@@ -11,14 +11,28 @@ const SignIn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const status = useSelector((state: RootState) => state.user.status);
+  const token = useSelector((state: RootState) => state.user.token); // Accès au token depuis le store
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
     setError(null); // Réinitialise les erreurs
     try {
-      await dispatch(login({ email, password })).unwrap();
-      // Unwrap pour récupérer les données ou lancer une erreur
-      navigate("/user");
+      // Déroulement de l'action login
+      const response = await dispatch(login({ email, password })).unwrap();
+      console.log("Login response:", response); // Confirmez que la réponse contient le token
+
+      // Assurez-vous d'extraire correctement le token de la réponse
+      const token = response.body.token;
+      console.log(token, "token");
+      if (token) {
+        // Stocker le token dans le store
+        await dispatch(fetchUserProfile());
+
+        // Rediriger l'utilisateur vers la page profil après la connexion réussie
+        navigate("/user");
+      } else {
+        throw new Error("Token is missing");
+      }
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
     }

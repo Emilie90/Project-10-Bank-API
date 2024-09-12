@@ -13,6 +13,7 @@ const EditProfile: React.FC = () => {
 
   useEffect(() => {
     if (loggedIn) {
+      dispatch();
     }
   }, [dispatch, loggedIn]);
 
