@@ -9,7 +9,7 @@ export const login = createAsyncThunk("user/login", async (loginRequest) => {
       "http://localhost:3001/api/v1/user/login",
       loginRequest
     );
-
+    console.log(response);
     sessionStorage.setItem("token", response.data.body.token);
     return response.data;
   } catch (error) {
@@ -22,22 +22,25 @@ export const fetchUserProfile = createAsyncThunk(
   "user/fetchProfile",
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
-    const token = state.user.token;
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
       return thunkAPI.rejectWithValue("No token available");
     }
 
-    const response = await axios.post(
-      "http://localhost:3001/api/v1/user/profile",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/v1/user/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
 
