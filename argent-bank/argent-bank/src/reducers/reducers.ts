@@ -23,21 +23,35 @@ export const fetchUserProfile = createAsyncThunk(
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const token = sessionStorage.getItem("token");
-
+    console.log("token", token);
     if (!token) {
       return thunkAPI.rejectWithValue("No token available");
     }
 
     try {
-      const response = await axios.get(
+      // const response = await axios.post(
+      //   "http://localhost:3001/api/v1/user/profile",
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      // console.log(response);
+      // return response.data;
+
+      const response = await fetch(
         "http://localhost:3001/api/v1/user/profile",
         {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      return response.data;
+      const user = await response.json();
+      console.log("response", user.body);
+      return user.body;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

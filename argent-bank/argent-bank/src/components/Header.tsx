@@ -6,7 +6,7 @@ import { fetchUserProfile } from "../reducers/reducers";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {
-  const user = useSelector((state: RootState) => state.user.profile); // Assurez-vous que `user` contient `profile`
+  const user = useSelector((state: RootState) => state.user.profile);
   const token = sessionStorage.getItem("token");
   const dispatch: AppDispatch = useDispatch();
 
@@ -16,7 +16,7 @@ const Header = () => {
         try {
           console.log("token", token);
           await dispatch(fetchUserProfile());
-          console.log(user);
+          console.log(user.body);
         } catch (error) {
           console.error("Erreur lors de la récupération du profil");
         }
