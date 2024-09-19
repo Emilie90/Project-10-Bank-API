@@ -12,6 +12,7 @@ const App: React.FC = () => {
         <Route path="/index" element={<HomePage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/user" element={<UserPage />} />
+        <Route path="/profile" element={<UserPage />} />
       </Routes>
     </BrowserRouter>
   );

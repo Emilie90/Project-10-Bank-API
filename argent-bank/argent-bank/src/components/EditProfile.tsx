@@ -1,35 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
+import { updateUser } from "../reducers/reducers";
 
 const EditProfile: React.FC = () => {
   const dispatch = useDispatch();
-  const { profile, error, loggedIn } = useSelector(
-    (state: RootState) => state.user
-  );
+  const isSignedIn = useSelector((state: RootState) => state.signIn.signIn);
+  const { profile, error } = useSelector((state: RootState) => state.user);
   const [firstName, setFirstName] = useState(profile?.firstName || "");
   const [lastName, setLastName] = useState(profile?.lastName || "");
-  const [email, setEmail] = useState(profile?.email || "");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (loggedIn) {
-      dispatch();
-    }
-  }, [dispatch, loggedIn]);
-
-  useEffect(() => {
-    if (profile) {
+    if (isSignedIn && profile) {
       setFirstName(profile.firstName);
       setLastName(profile.lastName);
-      setEmail(profile.email);
     }
-  }, [profile]);
+  }, [isSignedIn, profile]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/v1/user/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Ajout du token si nécessaire
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      dispatch(updateUser(data.body));
+    } catch (err) {
+      console.error(err);
+      // Gérer les erreurs
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!loggedIn) {
+  if (!isSignedIn) {
     return <p>You must be logged in to edit your profile.</p>;
   }
 
@@ -39,33 +63,27 @@ const EditProfile: React.FC = () => {
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
             id="firstName"
-            value={firstName}
+            placeholder={firstName}
+            // value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
             id="lastName"
-            value={lastName}
+            placeholder={lastName}
+            // value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <button type="submit">Save</button>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : "Save"}
+        </button>
       </form>
     </div>
   );

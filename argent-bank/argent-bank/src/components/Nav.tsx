@@ -2,21 +2,28 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../img/argentBankLogo.png";
 import { RootState } from "../store"; // Typage pour accéder au store
-import { logout } from "../reducers/reducers"; // Import action de déconnexion
+import { isSignIn, logout } from "../reducers/reducers"; // Ajout de fetchUserProfile
 import "../css/main.css";
+import SignIn from "./SignIn";
+import { useNavigate } from "react-router-dom";
 
 const Nav: React.FC = () => {
   const dispatch = useDispatch();
-
+  const user = useSelector((state: RootState) => state.user.profile);
+  const firstName = user.firstName;
+  const navigate = useNavigate();
   // Récupération des informations de l'utilisateur
   const isSignedIn = useSelector((state: RootState) => state.signIn.signIn);
-  const firstName = useSelector((state: RootState) => state.signIn.firstName);
+  // const firstName = useSelector((state: RootState) => state.signIn.firstName);
 
   // Fonction de déconnexion
   const handleSignOut = () => {
-    sessionStorage.removeItem("token"); // Clear the token
+    sessionStorage.clear(); // Clear the token
 
-    dispatch(logout()); // Déclenche la déconnexion
+    dispatch(isSignIn(false));
+    dispatch(logout());
+
+    navigate("/sign-in"); // Déclenche la déconnexion
   };
 
   return (

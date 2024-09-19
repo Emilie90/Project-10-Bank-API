@@ -9,7 +9,6 @@ export const login = createAsyncThunk("user/login", async (loginRequest) => {
       "http://localhost:3001/api/v1/user/login",
       loginRequest
     );
-    console.log(response);
     sessionStorage.setItem("token", response.data.body.token);
     return response.data;
   } catch (error) {
@@ -23,7 +22,6 @@ export const fetchUserProfile = createAsyncThunk(
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const token = sessionStorage.getItem("token");
-    console.log("token", token);
     if (!token) {
       return thunkAPI.rejectWithValue("No token available");
     }
@@ -50,8 +48,7 @@ export const fetchUserProfile = createAsyncThunk(
         }
       );
       const user = await response.json();
-      console.log("response", user.body);
-      return user.body;
+      return user;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -68,6 +65,7 @@ const initialState = {
   },
   status: "idle",
   error: null,
+  loggedIn: false,
 };
 
 // User Slice with async actions and reducers
@@ -80,6 +78,11 @@ export const userSlice = createSlice({
       state.profile = { email: null, firstName: null, lastName: null };
       state.status = "idle";
       state.error = null;
+    },
+    updateUser: (state, action: PayloadAction<{ firstName: string }>) => {
+      if (state.profile) {
+        state.profile.firstName = action.payload.firstName;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -112,6 +115,9 @@ export const userSlice = createSlice({
       });
   },
 });
+
+export const { updateUser } = userSlice.actions;
+
 // Remember Me Slice
 export const rememberMeSlice = createSlice({
   name: "rememberMe",
@@ -136,7 +142,7 @@ export const signInSlice = createSlice({
   },
   reducers: {
     isSignIn: (state, action) => {
-      state.signIn = action.payload.signIn;
+      state.signIn = true;
       state.token = action.payload.token;
       state.firstName = action.payload.firstName; // Stocker le prénom lors de la connexion
     },

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../css/main.css";
 import { useDispatch, useSelector } from "react-redux";
-import { login, fetchUserProfile } from "../reducers/reducers"; // Ajout de fetchUserProfile
+import { login, fetchUserProfile, isSignIn } from "../reducers/reducers"; // Ajout de fetchUserProfile
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
 
@@ -19,15 +19,13 @@ const SignIn: React.FC = () => {
     try {
       // Déroulement de l'action login
       const response = await dispatch(login({ email, password })).unwrap();
-      console.log("Login response:", response); // Confirmez que la réponse contient le token
 
       // Assurez-vous d'extraire correctement le token de la réponse
       const token = response.body.token;
-      console.log(token, "token");
       if (token) {
         // Stocker le token dans le store
         await dispatch(fetchUserProfile());
-
+        dispatch(isSignIn(true));
         // Rediriger l'utilisateur vers la page profil après la connexion réussie
         navigate("/user");
       } else {

@@ -1,22 +1,22 @@
 import Button from "./Button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchUserProfile } from "../reducers/reducers";
-import { NavLink } from "react-router-dom";
+import EditProfile from "./EditProfile"; // Importation du composant EditProfile
 
 const Header = () => {
   const user = useSelector((state: RootState) => state.user.profile);
   const token = sessionStorage.getItem("token");
   const dispatch: AppDispatch = useDispatch();
 
+  const [editMode, setEditMode] = useState(false); // État pour gérer l'affichage du formulaire d'édition
+
   useEffect(() => {
     const getData = async () => {
       if (token) {
         try {
-          console.log("token", token);
           await dispatch(fetchUserProfile());
-          console.log(user.body);
         } catch (error) {
           console.error("Erreur lors de la récupération du profil");
         }
@@ -26,15 +26,28 @@ const Header = () => {
     getData();
   }, [token, dispatch, user]);
 
+  const handleEditClick = () => {
+    setEditMode(true); // Passe en mode édition au clic sur le bouton
+  };
+
   return (
     <div className="header">
       <h1>
         Welcome back <br />
         {user.firstName + " " + user.lastName}!
       </h1>
-      <NavLink to="/profile">
-        <Button classe="edit-button" content="Edit Name" click={null} />
-      </NavLink>
+
+      {!editMode ? (
+        // Afficher le bouton si on n'est pas en mode édition
+        <Button
+          classe="edit-button"
+          content="Edit Name"
+          click={handleEditClick}
+        />
+      ) : (
+        // Afficher le composant EditProfile si on est en mode édition
+        <EditProfile />
+      )}
     </div>
   );
 };
