@@ -4,7 +4,6 @@ import logo from "../img/argentBankLogo.png";
 import { RootState } from "../store"; // Typage pour accéder au store
 import { isSignIn, logout } from "../reducers/reducers"; // Ajout de fetchUserProfile
 import "../css/main.css";
-import SignIn from "./SignIn";
 import { useNavigate } from "react-router-dom";
 
 const Nav: React.FC = () => {
@@ -14,7 +13,6 @@ const Nav: React.FC = () => {
   const navigate = useNavigate();
   // Récupération des informations de l'utilisateur
   const isSignedIn = useSelector((state: RootState) => state.signIn.signIn);
-  // const firstName = useSelector((state: RootState) => state.signIn.firstName);
 
   // Fonction de déconnexion
   const handleSignOut = () => {
