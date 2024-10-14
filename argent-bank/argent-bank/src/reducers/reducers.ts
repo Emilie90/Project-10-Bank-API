@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunk for login
+import { combineReducers } from "@reduxjs/toolkit";
+
 // Async thunk for login
 export const login = createAsyncThunk("user/login", async (loginRequest) => {
   try {
@@ -188,12 +189,22 @@ export const { isSignIn, setToken, logout } = signInSlice.actions;
 export const { setFirstName, setLastName, updateFirstName, updateLastName } =
   userInfosSlice.actions;
 
+// // Combine all reducers
+// export const reducers = {
+//   rememberMe: rememberMeSlice.reducer,
+//   signIn: signInSlice.reducer,
+//   userInfos: userInfosSlice.reducer,
+//   user: userSlice.reducer,
+// };
+
+// export default reducers;
+
 // Combine all reducers
-export const reducers = {
+const reducers = combineReducers({
   rememberMe: rememberMeSlice.reducer,
   signIn: signInSlice.reducer,
   userInfos: userInfosSlice.reducer,
   user: userSlice.reducer,
-};
+});
 
 export default reducers;

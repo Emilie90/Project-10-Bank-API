@@ -46,7 +46,14 @@ const Header = () => {
         />
       ) : (
         // Afficher le composant EditProfile si on est en mode édition
-        <EditProfile />
+        <>
+          <EditProfile />
+          <Button
+            classe="edit-button"
+            content="Exit Edit Mode"
+            click={() => setEditMode(false)}
+          />
+        </>
       )}
     </div>
   );

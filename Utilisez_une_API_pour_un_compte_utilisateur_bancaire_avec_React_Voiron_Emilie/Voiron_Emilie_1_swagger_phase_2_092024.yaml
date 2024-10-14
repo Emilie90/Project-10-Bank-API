@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: Argent Bank API
+  description: |-
+    Argent Bank API allows users to manage their bank accounts, view transaction history, and perform other financial operations.
+    This API is designed to be used by Argent Bank's web and mobile applications.
+  version: 1.0.0
+  contact:
+    email: support@argentbank.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.argentbank.com/v1
+    description: Production server
+  - url: https://sandbox.api.argentbank.com/v1
+    description: Sandbox server
+tags:
+  - name: Transaction
+    description: Operations related to transactions
+paths:
+  /account/{accountId}/transactions:
+    get:
+      tags:
+        - Transaction
+      summary: Get account transactions
+      description: Retrieve a list of transactions for a specific bank account.
+      operationId: getAccountTransactions
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          description: The ID of the account to retrieve transactions for
+          schema:
+            type: string
+        - name: token
+          in: query
+          required: true
+          description: token
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              
+                      
+        '401':
+          description: Unauthorized access
+        '404':
+          description: Account not found
+  /account/{accountId}/transactions/{transactionId}:
+    get:
+      tags:
+        - Transaction
+      summary: Get transaction details
+      description: Retrieve details of a specific transaction.
+      operationId: getTransactionDetails
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The ID of the transaction to retrieve
+          schema:
+            type: string
+        - name: token
+          in: query
+          required: true
+         
+          schema:
+            type: string
+        - name: accountId
+          in: query
+          required: true
+          
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transaction details retrieved successfully
+          content:
+            application/json:
+              schema:
+                
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          description: Unauthorized access
+        '404':
+          description: Transaction not found
+    patch:
+      tags:
+        - Transaction
+      summary: Update a transaction
+      description: Edit the category or note of a specific transaction.
+      operationId: updateTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The ID of the transaction to update
+          schema:
+            type: string
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                  example: "Groceries"
+                note:
+                  type: string
+                  example: "Bought weekly groceries"
+                
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+              
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized access
+        '404':
+          description: Transaction not found
+  
+components:
+  schemas:
+    
+    Transaction:
+     
+      properties:
+        id:
+          type: string
+          example: "txn789"
+        
+        date:
+          type: string
+          format: date-time
+          example: "2023-08-15T12:34:56Z"
+        description:
+          type: string
+          example: "Salary deposit"
+        transaction type:
+          type: string
+          example: "Deposit"
+        amount:
+          type: number
+          format: float
+          example: 200.00
+        balance:
+          type: number
+          format: float
+          example: 2000.00
+        category:
+          type: string
+        Note:
+          type: string
+         
+        
+        
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

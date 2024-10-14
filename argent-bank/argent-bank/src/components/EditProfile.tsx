@@ -13,8 +13,8 @@ const EditProfile: React.FC = () => {
 
   useEffect(() => {
     if (isSignedIn && profile) {
-      setFirstName(profile.firstName);
-      setLastName(profile.lastName);
+      setFirstName(firstName);
+      setLastName(lastName);
     }
   }, [isSignedIn, profile]);
 
@@ -60,7 +60,6 @@ const EditProfile: React.FC = () => {
   return (
     <div>
       <h1>Edit Profile</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <input
