@@ -11,7 +11,6 @@ const SignIn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const status = useSelector((state: RootState) => state.user.status);
-  const token = useSelector((state: RootState) => state.user.token); // Accès au token depuis le store
   const navigate = useNavigate();
 
   const handleSignIn = async () => {

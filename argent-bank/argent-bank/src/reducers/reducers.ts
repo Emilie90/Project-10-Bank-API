@@ -28,17 +28,6 @@ export const fetchUserProfile = createAsyncThunk(
     }
 
     try {
-      // const response = await axios.post(
-      //   "http://localhost:3001/api/v1/user/profile",
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-      // console.log(response);
-      // return response.data;
-
       const response = await fetch(
         "http://localhost:3001/api/v1/user/profile",
         {
@@ -189,17 +178,6 @@ export const { isSignIn, setToken, logout } = signInSlice.actions;
 export const { setFirstName, setLastName, updateFirstName, updateLastName } =
   userInfosSlice.actions;
 
-// // Combine all reducers
-// export const reducers = {
-//   rememberMe: rememberMeSlice.reducer,
-//   signIn: signInSlice.reducer,
-//   userInfos: userInfosSlice.reducer,
-//   user: userSlice.reducer,
-// };
-
-// export default reducers;
-
-// Combine all reducers
 const reducers = combineReducers({
   rememberMe: rememberMeSlice.reducer,
   signIn: signInSlice.reducer,

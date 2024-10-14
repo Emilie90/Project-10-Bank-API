@@ -16,7 +16,7 @@ const EditProfile: React.FC = () => {
       setFirstName(firstName);
       setLastName(lastName);
     }
-  }, [isSignedIn, profile]);
+  }, [firstName, isSignedIn, lastName, profile]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +75,6 @@ const EditProfile: React.FC = () => {
             type="text"
             id="lastName"
             placeholder={lastName}
-            // value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
